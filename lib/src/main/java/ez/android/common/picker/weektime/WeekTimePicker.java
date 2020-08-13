@@ -13,24 +13,15 @@ import android.widget.TimePicker;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class WeekTimePicker extends FrameLayout {
     private TimePicker mTimePicker;
     private LinearLayout mWeeks;
-    private Map<Integer, Boolean> mSelectedWeeks = new HashMap<>();
-
-    {
-        mSelectedWeeks.put(Calendar.MONDAY, false);
-        mSelectedWeeks.put(Calendar.TUESDAY, false);
-        mSelectedWeeks.put(Calendar.WEDNESDAY, false);
-        mSelectedWeeks.put(Calendar.THURSDAY, false);
-        mSelectedWeeks.put(Calendar.FRIDAY, false);
-        mSelectedWeeks.put(Calendar.SATURDAY, false);
-        mSelectedWeeks.put(Calendar.SUNDAY, false);
-    }
 
     public WeekTimePicker(@NonNull Context context) {
         this(context, null, 0);
@@ -79,6 +70,18 @@ public class WeekTimePicker extends FrameLayout {
     }
 
     /**
+     * Set current hour
+     * @param hour
+     */
+    public void setHour(int hour) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mTimePicker.setHour(hour);
+        } else {
+            mTimePicker.setCurrentHour(hour);
+        }
+    }
+
+    /**
      * Get selected minute
      * @return
      */
@@ -91,14 +94,38 @@ public class WeekTimePicker extends FrameLayout {
     }
 
     /**
-     *
+     * Set current minute
+     * @param minute
+     */
+    public void setMinute(int minute) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            mTimePicker.setMinute(minute);
+        } else {
+            mTimePicker.setCurrentMinute(minute);
+        }
+    }
+
+    /**
+     * Get selected weeks {@link Calendar}
      * @return
      */
-    public Map<Integer, Boolean> getWeeks() {
+    public List<Integer> getWeeks() {
+        List<Integer> mSelectedWeeks = new ArrayList<>();
         for(int i = 0; i < mWeeks.getChildCount(); i++) {
             CheckBox checkBox = (CheckBox) mWeeks.getChildAt(i);
-            mSelectedWeeks.put(Integer.parseInt(checkBox.getTag().toString()), checkBox.isChecked());
+            mSelectedWeeks.add(Integer.parseInt(checkBox.getTag().toString()));
         }
         return mSelectedWeeks;
+    }
+
+    /**
+     * Set selected weeks
+     * @return
+     */
+    public void setWeeks(List<Integer> weeks) {
+        for(int i = 0; i < mWeeks.getChildCount(); i++) {
+            CheckBox checkBox = (CheckBox) mWeeks.getChildAt(i);
+            checkBox.setChecked(weeks.contains(Integer.parseInt(checkBox.getTag().toString())));
+        }
     }
 }
