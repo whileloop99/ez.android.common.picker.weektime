@@ -109,11 +109,13 @@ public class WeekTimePicker extends FrameLayout {
      * Get selected weeks {@link Calendar}
      * @return
      */
-    public List<Integer> getWeeks() {
+    public List<Integer> getSelectedWeeks() {
         List<Integer> mSelectedWeeks = new ArrayList<>();
         for(int i = 0; i < mWeeks.getChildCount(); i++) {
             CheckBox checkBox = (CheckBox) mWeeks.getChildAt(i);
-            mSelectedWeeks.add(Integer.parseInt(checkBox.getTag().toString()));
+            if(checkBox.isChecked()) {
+                mSelectedWeeks.add(Integer.parseInt(checkBox.getTag().toString()));
+            }
         }
         return mSelectedWeeks;
     }
@@ -122,7 +124,7 @@ public class WeekTimePicker extends FrameLayout {
      * Set selected weeks
      * @return
      */
-    public void setWeeks(List<Integer> weeks) {
+    public void setSelectedWeeks(List<Integer> weeks) {
         for(int i = 0; i < mWeeks.getChildCount(); i++) {
             CheckBox checkBox = (CheckBox) mWeeks.getChildAt(i);
             checkBox.setChecked(weeks.contains(Integer.parseInt(checkBox.getTag().toString())));
